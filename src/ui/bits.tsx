@@ -48,12 +48,14 @@ export function CafeCard({ p }: { p: Record<string, unknown> }) {
   return (
     <div className="cafecard">
       <span className="card-emblem" aria-hidden="true">ق</span>
+      <div className="cafe-details">
       {slot("نوع", p.type)}
       {slot("سابقه", p.years, " سال")}
       {slot("صندلی", p.seats)}
       {slot("نیرو", p.staff_ft === undefined ? undefined : (p.staff_ft as number) + (p.staff_pt as number ?? 0))}
       {slot("شعبه", p.branches)}
       {slot("صندوق", p.pos)}
+      </div>
     </div>
   );
 }

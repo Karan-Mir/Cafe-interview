@@ -51,5 +51,5 @@ export function Illustration({ kind, small = false }: { kind: IllustrationKind; 
 }
 
 export function SectionIntro({ kind, title, description, step }: { kind: IllustrationKind; title: string; description: string; step?: string }) {
-  return <header className="section-intro"><div>{step && <div className="eyebrow">{step}</div>}<h2>{title}</h2><p className="helper">{description}</p></div><Illustration kind={kind}/></header>;
+  return <header className="section-intro"><div className="intro-heading">{step && <div className="eyebrow">{step}</div>}<h2>{title}</h2></div><Illustration kind={kind}/><p className="helper">{description}</p></header>;
 }

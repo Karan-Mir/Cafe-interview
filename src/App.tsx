@@ -104,12 +104,14 @@ export default function App() {
             gate than the session PIN -- so before a session exists it opens
             directly. Mid-session it stays behind the PIN, because then a café
             owner is holding the phone. */}
-        <button className="btn quiet" style={{ position: "fixed", insetBlockEnd: 8, insetInlineStart: 8 }}
+        <nav className="preflight-tools" aria-label="ابزارهای مصاحبه‌گر">
+        <button className="btn quiet"
                 onClick={() => setSyncing(true)}>
           پنل مدیریت{pending > 0 ? ` (${new Intl.NumberFormat("fa-IR").format(pending)})` : ""}
         </button>
-        <button className="btn quiet" style={{ position: "fixed", insetBlockEnd: 8, insetInlineEnd: 8 }}
+        <button className="btn quiet"
                 onClick={() => setShowAdmin(true)}>بایگانی</button>
+        </nav>
         {showAdmin && (
           <div className="overlay" style={{ placeItems: "start", overflow: "auto" }}>
             <div className="screen">
@@ -119,7 +121,7 @@ export default function App() {
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: ".5rem", flex: 1 }}>
                 {all.map((s) => (
-                  <div className="jobrow" key={s.session_id}>
+                  <div className="jobrow archive-row" key={s.session_id}>
                     <div className="name small">
                       {s.session_id.slice(0, 8)} · {s.interviewer} ·{" "}
                       {s.finished_at ? "تمام" : "ناتمام"}
@@ -191,13 +193,11 @@ export default function App() {
 
   return (
     <>
-      {body}
-      {/* the only screen that needs landscape -- see RotateHint */}
-      {m === "cbc" && <RotateHint />}
+      <nav className="session-toolbar" aria-label="کنترل جلسه">
       {/* long-press the wordmark + PIN to reach the observation block (SPEC 2.7) */}
       <button
         className="btn quiet"
-        style={{ position: "fixed", insetBlockStart: 4, insetInlineStart: 8, fontSize: ".85rem", opacity: .5 }}
+        aria-label="قهوه‌سنج؛ برای ورود مصاحبه‌گر نگه دارید"
         onPointerDown={() => {
           const t = window.setTimeout(() => { setPinIntent("observe"); setAskPin(true); }, 1200);
           const clear = () => { window.clearTimeout(t); window.removeEventListener("pointerup", clear); };
@@ -207,9 +207,11 @@ export default function App() {
 
       {m !== "done" && (
         <button className="btn quiet"
-                style={{ position: "fixed", insetBlockStart: 4, insetInlineEnd: 8, fontSize: ".85rem" }}
                 onClick={() => setPaused(true)}>{COPY.pause}</button>
       )}
+      </nav>
+      {body}
+      {m === "cbc" && <RotateHint />}
     </>
   );
 }

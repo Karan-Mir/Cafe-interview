@@ -38,7 +38,7 @@ export default function M03Coins() {
         {COIN_JOBS.map((name, k) => {
           const v = coins[`job_${k}`] ?? 0;
           return (
-            <div className="jobrow" key={k}>
+            <div className="jobrow coin-row" key={k}>
               <button className="btn ghost" style={{ minWidth: 56 }} disabled={v === 0} onClick={() => bump(k, -1)} aria-label={`کم کردن سکه از ${name}`}>−</button>
               <div className="dots" aria-hidden>
                 {Array.from({ length: v }, (_, n) => <span key={n} className="dot" />)}

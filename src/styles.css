@@ -141,17 +141,17 @@ p  { margin: 0; }
    packages fit inside ~375px of height without scrolling. Scoped to this query,
    so nothing here touches the tablet or portrait design. */
 @media (orientation: landscape) and (max-height: 540px) {
-  .screen { padding: .5rem .75rem; gap: .45rem; }
-  .packs { max-height: none; gap: .45rem; }
-  .pack { padding: .55rem .6rem; gap: .3rem; border-width: 2px; }
-  .pack .row { font-size: .82rem; line-height: 1.25; }
-  .pack .row .ic { width: 1rem; }
-  .pack .price { padding-top: .4rem; border-top-width: 1px; }
-  .pack .price .big { font-size: 1rem; }
-  .pack .price .sub { font-size: .72rem; }
-  .screen h2 { font-size: 1.05rem; }
-  .eyebrow { font-size: .8rem; }
-  .progress { display: none; }
+  .cbc-screen { padding: .5rem .75rem; gap: .45rem; }
+  .cbc-screen .packs { max-height: none; gap: .45rem; }
+  .cbc-screen .pack { padding: .55rem .6rem; gap: .3rem; border-width: 2px; }
+  .cbc-screen .pack .row { font-size: .82rem; line-height: 1.25; }
+  .cbc-screen .pack .row .ic { width: 1rem; }
+  .cbc-screen .pack .price { padding-top: .4rem; border-top-width: 1px; }
+  .cbc-screen .pack .price .big { font-size: 1rem; }
+  .cbc-screen .pack .price .sub { font-size: .72rem; }
+  .cbc-screen h2 { font-size: 1.05rem; }
+  .cbc-screen .eyebrow { font-size: .8rem; }
+  .cbc-screen .progress { display: none; }
 }
 .pack {
   background: var(--surface); border: 3px solid var(--hairline); border-radius: 14px;
@@ -457,22 +457,22 @@ button:disabled { cursor:default; }
 @media (orientation: landscape) and (max-height: 540px) {
   /* min-height:100% plus this padding is 100%+8px, i.e. a permanently scrolling
      choice screen. In landscape the content sizes itself instead. */
-  .screen { padding: .3rem .7rem .2rem; gap: .28rem; min-height: 0; }
+  .cbc-screen { padding: .3rem .7rem .2rem; gap: .28rem; min-height: 0; }
 
   /* the 165px illustrated header does not survive a 375px screen */
-  .section-intro { display: none; }
-  .progress { display: none; }
+  .cbc-screen .section-intro { display: none; }
+  .cbc-screen .progress { display: none; }
 
-  .packs { max-height: none; gap: .4rem; }
-  .pack { padding: .5rem .55rem; gap: .15rem; border-width: 2px; }
+  .cbc-screen .packs { max-height: none; gap: .4rem; }
+  .cbc-screen .pack { padding: .5rem .55rem; gap: .15rem; border-width: 2px; }
 
   /* the 3-D package sculpture is 60px + 28px of margin, per card, three across */
-  .package-object { display: none; }
+  .cbc-screen .package-object { display: none; }
 
-  .pack-title { font-size: .82rem; gap: .2rem; }
-  .pack-title > span { font-size: .64rem; }
+  .cbc-screen .pack-title { font-size: .82rem; gap: .2rem; }
+  .cbc-screen .pack-title > span { font-size: .64rem; }
 
-  .pack .row {
+  .cbc-screen .pack .row {
     font-size: .78rem; line-height: 1.3;
     padding-bottom: .12rem; border-bottom-color: transparent;
     /* The authored min-height is 68px, which keeps the six rows aligned across
@@ -481,22 +481,22 @@ button:disabled { cursor:default; }
        rows still line up, just at 34px instead of 68. */
     min-height: 2.1rem;
   }
-  .pack .row .ic { margin-top: 0; width: .9rem; font-size: .7rem; }
+  .cbc-screen .pack .row .ic { margin-top: 0; width: .9rem; font-size: .7rem; }
 
   /* The attribute label is a block, and it repeats identically on all three
      cards, so every row costs a label line plus a value line. Inline rather
      than hidden: the icons alone (diamond, arrow, lozenge) do not tell an owner
      what a row MEANS, and an unreadable card is worse than a scrolling one. */
-  .pack .row .attribute-label { display: inline; }
-  .pack .row .attribute-label::after { content: "‏: "; }
-  .pack .price .attribute-label { display: inline; font-size: .68rem; }
+  .cbc-screen .pack .row .attribute-label { display: inline; }
+  .cbc-screen .pack .row .attribute-label::after { content: "‏: "; }
+  .cbc-screen .pack .price .attribute-label { display: inline; font-size: .68rem; }
 
-  .pack .price { padding-top: .3rem; border-top-width: 1px; }
-  .pack .price .big { font-size: .95rem; }
-  .pack .price .sub { font-size: .68rem; }
+  .cbc-screen .pack .price { padding-top: .3rem; border-top-width: 1px; }
+  .cbc-screen .pack .price .big { font-size: .95rem; }
+  .cbc-screen .pack .price .sub { font-size: .68rem; }
 
-  .screen h1, .screen h2 { font-size: 1rem; line-height: 1.3; margin: 0; }
-  .eyebrow { font-size: .72rem; }
-  .foot { padding-top: .15rem; }
-  .notice { padding: .45rem .6rem; font-size: .8rem; }
+  .cbc-screen h1, .cbc-screen h2 { font-size: 1rem; line-height: 1.3; margin: 0; }
+  .cbc-screen .eyebrow { font-size: .72rem; }
+  .cbc-screen .foot { padding-top: .15rem; }
+  .cbc-screen .notice { padding: .45rem .6rem; font-size: .8rem; }
 }

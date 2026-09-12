@@ -51,7 +51,7 @@ export default function M04CBC() {
   };
 
   return (
-    <div className="screen">
+    <div className="screen cbc-screen">
       <Progress n={i + 1} of={tasks.length} />
       <SectionIntro kind="choices" title={COPY.cbcPrompt} description="هر بسته را با همهٔ ویژگی‌ها و قیمت ماهانه‌اش بسنج. ابتدا مناسب‌ترین را انتخاب کن؛ سپس بگو آیا واقعاً آن را می‌خریدی. انتخاب اینجا هیچ تعهد خریدی ایجاد نمی‌کند." step={`مقایسهٔ بسته‌ها · ${fa(i + 1)} از ${fa(tasks.length)}`} />
 
