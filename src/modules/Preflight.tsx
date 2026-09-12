@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useSession } from "../core/store";
 import { Chip, Field } from "../ui/bits";
 import { fa } from "../core/fa";
@@ -9,7 +9,7 @@ const ITEMS = ["اسپرسو", "قهوهٔ ساده", "چای"];
 
 /** SPEC 2.0 -- the interviewer's screen. Not part of the player's flow: this is
  *  filled in BEFORE the tablet is handed over. */
-export default function Preflight({ onReady }: { onReady: (pin: string) => void }) {
+export default function Preflight({ onReady, tools }: { onReady: (pin: string) => void; tools?: ReactNode }) {
   const [pending, setPending] = useState(0);
   useEffect(() => { pendingCount().then(setPending); }, []);
   const begin = useSession((s) => s.begin);
@@ -81,11 +81,14 @@ export default function Preflight({ onReady }: { onReady: (pin: string) => void 
         <p className="helper">مبلغ را به تومان وارد کنید، نه ریال. حداقل مبلغ قابل ثبت ۱۰٬۰۰۰ تومان است.</p>
       </Field>
 
-      <div className="foot">
-        <button className="btn primary" disabled={!ready}
-                onClick={async () => { await begin(who.trim(), device.trim(), item, toman); onReady(pin); }}>
-          شروع جلسه
-        </button>
+      <div className="preflight-actions">
+        <div className="foot">
+          <button className="btn primary" disabled={!ready}
+                  onClick={async () => { await begin(who.trim(), device.trim(), item, toman); onReady(pin); }}>
+            شروع جلسه
+          </button>
+        </div>
+        {tools}
       </div>
     </div>
   );

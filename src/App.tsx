@@ -99,19 +99,20 @@ export default function App() {
             </div>
           </div>
         )}
-        <Preflight onReady={setPin} />
-        {/* The admin panel is gated by the Supabase login, which is a stronger
-            gate than the session PIN -- so before a session exists it opens
-            directly. Mid-session it stays behind the PIN, because then a café
-            owner is holding the phone. */}
-        <nav className="preflight-tools" aria-label="ابزارهای مصاحبه‌گر">
-        <button className="btn quiet"
-                onClick={() => setSyncing(true)}>
-          پنل مدیریت{pending > 0 ? ` (${new Intl.NumberFormat("fa-IR").format(pending)})` : ""}
-        </button>
-        <button className="btn quiet"
-                onClick={() => setShowAdmin(true)}>بایگانی</button>
-        </nav>
+        <Preflight onReady={setPin} tools={
+          /* The admin panel is gated by the Supabase login, which is a stronger
+             gate than the session PIN -- so before a session exists it opens
+             directly. Mid-session it stays behind the PIN, because then a café
+             owner is holding the phone. */
+          <nav className="preflight-tools" aria-label="ابزارهای مصاحبه‌گر">
+            <button className="btn quiet"
+                    onClick={() => setSyncing(true)}>
+              پنل مدیریت{pending > 0 ? ` (${new Intl.NumberFormat("fa-IR").format(pending)})` : ""}
+            </button>
+            <button className="btn quiet"
+                    onClick={() => setShowAdmin(true)}>بایگانی</button>
+          </nav>
+        } />
         {showAdmin && (
           <div className="overlay" style={{ placeItems: "start", overflow: "auto" }}>
             <div className="screen">

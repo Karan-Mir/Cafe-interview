@@ -8,8 +8,11 @@ h1,h2,.eyebrow { letter-spacing:normal; }
 .session-toolbar .btn { font-size:.86rem; color:#3d5843; }
 .session-toolbar .btn:first-child { font-weight:700; }
 .session-toolbar + .screen { min-height:calc(100svh - 60px); }
-.preflight-tools { display:flex; justify-content:center; flex-wrap:wrap; gap:.6rem; padding:1rem 1rem max(1.5rem,env(safe-area-inset-bottom)); border-top:1px solid #ccd2c055; }
-.preflight-tools .btn { background:#fffdf6; border:1px solid #d6ddcd; border-radius:100px; font-size:.9rem; }
+.preflight-actions { margin-top:auto; display:grid; gap:.85rem; padding-bottom:max(.25rem,env(safe-area-inset-bottom)); }
+.preflight-actions > .foot { margin:0; padding:0; }
+.preflight-actions > .foot .primary { width:100%; flex:none; }
+.preflight-tools { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:.6rem; padding:.75rem 0 0; border-top:1px solid #ccd2c080; position:static; isolation:isolate; }
+.preflight-tools .btn { position:static; flex:0 1 auto; background:#fffdf6; border:1px solid #d6ddcd; border-radius:100px; font-size:.9rem; line-height:1.5; }
 .section-intro { display:grid; grid-template-columns:minmax(0,1fr) 150px; grid-template-areas:"heading art" "copy art"; gap:.35rem 1.25rem; align-items:center; }
 .section-intro .intro-heading { grid-area:heading; }
 .section-intro > .illustration { grid-area:art; width:150px; height:120px; margin:0; overflow:hidden; }
