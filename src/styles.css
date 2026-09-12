@@ -409,7 +409,7 @@ button:disabled { cursor:default; }
   .section-intro .illustration { width:82px; height:70px; margin-top:.6rem; }
   .section-intro h2 { font-size:1.4rem; }
   .helper { font-size:.91rem; line-height:1.95; }
-  .section-intro .helper { margin-inline-end:-85px; padding-top:.3rem; }
+  .section-intro .helper { margin:0; padding-top:.3rem; }
   .screen > .field { padding:1rem; }
   .grid2 { grid-template-columns:1fr; }
   .mdcard { min-height:0; padding:1.2rem; }
