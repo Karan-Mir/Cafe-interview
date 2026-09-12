@@ -40,6 +40,23 @@ The app **verifies the design files against their own hashes at startup** and re
 to run if they do not match, because `cbc_version` is an index and two tablets carrying
 different design files would silently poison the pooled data.
 
+## Live
+
+**App (collectors):** https://karan-mir.github.io/Cafe-interview/
+Open once per phone on wifi, then add to home screen. After that it runs with no
+network at all — the service worker precaches everything.
+
+**Data (admins):** inside the app — long-press the wordmark on the pre-flight
+screen, or the پنل مدیریت button, and sign in. Sessions upload themselves within
+seconds of an interview ending; the phone keeps a copy only until the server
+confirms the row, then purges it.
+
+Backend is Supabase (`eu-west-1`). Schema and policies in `supabase/schema.sql`.
+The publishable key in `.env.production` is public by design: Vite inlines it
+into the bundle, and RLS grants `anon` no read and no write. Verified against a
+live row — anonymous SELECT returns `[]` with data present, anonymous INSERT
+returns 401.
+
 ## Deploying
 
 Two repos, because GitHub Pages only serves a **public** repo on the free plan and
