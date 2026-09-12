@@ -1,0 +1,62 @@
+name: deploy
+
+# Publishes the tablet app to GitHub Pages. Lives in the PUBLIC repo, because
+# Pages only serves from a public repo on the free plan. The app holds no
+# secrets: sync tokens are entered per-device and live in that device's storage.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Verify the shipped design matches its own hash
+        run: |
+          python -m pip install --quiet numpy
+          python design/generate_designs.py --verify
+
+      - name: Build
+        env:
+          # a project site lives under /<repo>/
+          VITE_BASE: /${{ github.event.repository.name }}/
+          # Repository variables win if set, so the key can be rotated in the
+          # GitHub UI without a commit. Otherwise .env.production is used.
+          VITE_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+        run: |
+          # an empty repo variable must not blank out .env.production
+          [ -z "$VITE_SUPABASE_URL" ] && unset VITE_SUPABASE_URL
+          [ -z "$VITE_SUPABASE_ANON_KEY" ] && unset VITE_SUPABASE_ANON_KEY
+          npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: dist }
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

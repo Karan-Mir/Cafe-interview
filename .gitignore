@@ -1,0 +1,13 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+sessions/*.json
+analysis/*.csv
+analysis/quality_report.txt
+analysis/benchmarks.json
+__pycache__
+*.tsbuildinfo
+.env.local
+.env
