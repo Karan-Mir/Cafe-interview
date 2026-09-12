@@ -3,6 +3,7 @@ import { useSession, buildMaxdiffSets } from "../core/store";
 import { MAXDIFF_ITEMS, COPY } from "../content/items";
 import { Progress } from "../ui/bits";
 import { SectionIntro } from "../ui/Illustration";
+import ServiceVisual from "../ui/ServiceVisual";
 import { fa } from "../core/fa";
 
 /** Twelve fixed sets; explicit best/worst controls allow reviewing both choices
@@ -39,18 +40,23 @@ export default function M02MaxDiff() {
   return (
     <div className="screen">
       <Progress n={i + 1} of={sets.length} />
-      <SectionIntro kind="choices" title="کدام ایده بیشتر به کارت می‌آید؟" description={COPY.maxdiffHelp} step={`مقایسهٔ ایده‌ها · ${fa(i + 1)} از ${fa(sets.length)}`} />
+      <SectionIntro kind="choices" title="از بین این چهار ایده، کدام بیشتر به کارت می‌آید و کدام کمتر؟" description={COPY.maxdiffHelp} step={`مقایسهٔ ایده‌ها · ${fa(i + 1)} از ${fa(sets.length)}`} />
 
       <div className="grid2">
         {items.map((it) => {
           const pick = best === it ? "best" : worst === it ? "worst" : undefined;
           return (
             <div key={it} className="mdcard" data-pick={pick}>
-              <div className="t">{MAXDIFF_ITEMS[it].title}</div>
-              <div className="l">{MAXDIFF_ITEMS[it].line}</div>
+              <div className="mdcard-main">
+                <ServiceVisual kind={MAXDIFF_ITEMS[it].visual} />
+                <div className="mdcard-copy">
+                  <div className="t">{MAXDIFF_ITEMS[it].title}</div>
+                  <div className="l">{MAXDIFF_ITEMS[it].line}</div>
+                </div>
+              </div>
               <div className="choice-actions">
-                <button className="choice-toggle" aria-pressed={best === it} disabled={saving} onClick={() => { setBest(best === it ? null : it); if (worst === it) setWorst(null); }} aria-label={`${MAXDIFF_ITEMS[it].title}: ${COPY.maxdiffBest}`}>＋ {COPY.maxdiffBest}</button>
-                <button className="choice-toggle" aria-pressed={worst === it} disabled={saving} onClick={() => { setWorst(worst === it ? null : it); if (best === it) setBest(null); }} aria-label={`${MAXDIFF_ITEMS[it].title}: ${COPY.maxdiffWorst}`}>− {COPY.maxdiffWorst}</button>
+                <button className="choice-toggle choice-best" aria-pressed={best === it} disabled={saving} onClick={() => { setBest(best === it ? null : it); if (worst === it) setWorst(null); }} aria-label={`${MAXDIFF_ITEMS[it].title}: ${COPY.maxdiffBest}`}><span className="choice-symbol">↑</span>{COPY.maxdiffBest}</button>
+                <button className="choice-toggle choice-worst" aria-pressed={worst === it} disabled={saving} onClick={() => { setWorst(worst === it ? null : it); if (best === it) setBest(null); }} aria-label={`${MAXDIFF_ITEMS[it].title}: ${COPY.maxdiffWorst}`}><span className="choice-symbol">↓</span>{COPY.maxdiffWorst}</button>
               </div>
             </div>
           );

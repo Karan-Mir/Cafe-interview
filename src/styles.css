@@ -118,6 +118,14 @@ p  { margin: 0; }
 .mdcard .t { font-weight: 700; font-size: 1.15rem; line-height: 1.3; }
 .mdcard .l { font-size: .98rem; color: var(--ink-muted); line-height: 1.4; }
 .mdcard .mark { font-size: .9rem; font-weight: 700; margin-top: auto; }
+.mdcard-main { display:grid; grid-template-columns:64px minmax(0,1fr); gap:1rem; align-items:center; }
+.mdcard-copy { min-width:0; }
+.service-visual { width:64px; height:64px; display:grid; place-items:center; color:var(--moss); filter:drop-shadow(0 7px 10px #274b3620); }
+.service-visual svg { display:block; width:100%; height:100%; overflow:visible; }
+.service-visual-halo { fill:#edf1df; stroke:#c7d2b8; stroke-width:1.2; }
+.choice-symbol { width:1.6rem; height:1.6rem; border-radius:50%; display:inline-grid; place-items:center; background:#e4eadb; color:#355941; font-size:1.15rem; line-height:1; flex:none; }
+.choice-worst .choice-symbol { background:#f2e9df; color:#765a45; }
+.choice-toggle[aria-pressed="true"] .choice-symbol { background:#fffdf3; color:#244733; }
 .mdcard[data-pick="best"]  { border-color: var(--moss); background: var(--moss-soft); }
 .mdcard[data-pick="best"]  .mark { color: var(--moss); }
 .mdcard[data-pick="worst"] { border-color: var(--hairline-strong); background: var(--surface-2); opacity: .85; }
@@ -370,6 +378,7 @@ button:disabled { cursor:default; }
 .choice-actions { display:flex; flex-wrap:wrap; gap:.55rem; margin-top:auto; padding-top:1rem; }
 .choice-toggle { flex:1 1 120px; min-height:48px; border:1px solid #b8c5ab; background:#fffcf7; border-radius:12px; font-size:.88rem; font-weight:600; padding:.5rem; transition:background .18s,box-shadow .18s; }
 .choice-toggle[aria-pressed="true"] { background:#2b503a; border-color:#2b503a; color:#fffdf3; box-shadow:0 3px 0 #1a3525; }
+.choice-worst[aria-pressed="true"] { background:#765f4b; border-color:#765f4b; box-shadow:0 3px 0 #4f3d30; }
 .mdcard[data-pick="worst"] { opacity:1; }
 .mdcard .l { max-width:none; line-height:1.9; }
 .mdcard .t { line-height:1.7; }
