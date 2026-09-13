@@ -116,8 +116,8 @@ input.chip,textarea { font-size:16px; max-width:100%; }
   .service-artwork { max-height:92px; border-radius:12px; }
   .mdcard .t { font-size:.95rem; line-height:1.55; }
   .mdcard .l { font-size:.84rem; line-height:1.65; }
-  .choice-actions { gap:.35rem; padding-top:.4rem; }
-  .choice-toggle { min-height:44px; flex:1 1 100%; padding:.35rem; font-size:.84rem; border-radius:10px; }
+  .choice-actions { grid-template-columns:1fr; gap:.35rem; padding-top:.4rem; }
+  .choice-toggle { min-height:44px; padding:.35rem; font-size:.84rem; border-radius:10px; }
   .choice-symbol { width:1.35rem; height:1.35rem; font-size:.95rem; }
 }
 
