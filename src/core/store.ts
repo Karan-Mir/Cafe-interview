@@ -4,7 +4,6 @@ import { cbcDesign, maxdiffDesign, hashToVersion, dominatedIndex } from "./desig
 import { PRICE_MULT } from "../content/items";
 import { putSession } from "./db";
 import { recomputeQuality } from "./quality";
-import { syncInBackground } from "./sync";
 
 /** Deterministic PRNG, seeded from the session id.
  *  [STATS] The task SEQUENCE and the left-to-right card order are presentation,
@@ -135,7 +134,9 @@ export const useSession = create<State>((set, get) => ({
     });
     // SPEC 0.4 -- fired AFTER the session is closed and already in IndexedDB.
     // Nothing awaits it; the owner never sees a spinner or an error.
-    if (module === "done") syncInBackground();
+    if (module === "done") {
+      void import("./sync").then(({ syncInBackground }) => syncInBackground());
+    }
   },
 
   setPaused: (v) => set({ paused: v }),

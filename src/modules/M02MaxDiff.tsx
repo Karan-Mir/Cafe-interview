@@ -65,8 +65,11 @@ export default function M02MaxDiff() {
 
       <div className="foot">
         {i > 0 && <button className="btn ghost" onClick={() => goto("maxdiff", i - 1)}>{COPY.back}</button>}
-        <button className="btn primary" disabled={best === null || worst === null || saving} onClick={advance}>{saving ? "در حال ذخیره…" : COPY.next}</button>
+        <button className="btn primary" disabled={best === null || worst === null || saving} aria-describedby="maxdiff-next-hint" onClick={advance}>{saving ? "در حال ذخیره…" : COPY.next}</button>
       </div>
+      {(best === null || worst === null) && <p id="maxdiff-next-hint" className="action-hint" role="status">
+        {best === null && worst === null ? "اول یک ایده را «بیشترین فایده» و یک ایدهٔ دیگر را «کمترین فایده» انتخاب کن." : best === null ? "حالا ایده‌ای را که بیشترین فایده را دارد انتخاب کن." : "حالا ایده‌ای را که کمترین فایده را دارد انتخاب کن."}
+      </p>}
     </div>
   );
 }

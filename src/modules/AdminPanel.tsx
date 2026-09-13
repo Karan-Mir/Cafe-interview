@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Field } from "../ui/bits";
 import { fa } from "../core/fa";
 import { supabase, isConfigured, signIn, signOut, ping, currentUser } from "../core/supabase";
-import { syncNow, pendingCount, deviceId, setDeviceId, type SyncResult } from "../core/sync";
+import { syncNow, type SyncResult } from "../core/sync";
+import { pendingCount, deviceId, setDeviceId } from "../core/outbox";
 import { MAXDIFF_ITEMS } from "../content/items";
 
 interface Row {

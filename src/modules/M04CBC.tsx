@@ -33,6 +33,11 @@ export default function M04CBC() {
   useEffect(() => { setChosen(null); firstTap.current = null; t0.current = performance.now(); }, [i]);
   useEffect(() => { if (chosen !== null) buyPanel.current?.scrollIntoView({ block: "nearest", behavior: "auto" }); }, [chosen]);
 
+  const select = (k: number) => {
+    if (firstTap.current === null) firstTap.current = Math.round(performance.now() - t0.current);
+    setChosen(k);
+  };
+
   const answer = async (buy: boolean) => {
     if (chosen === null || saving) return;
     setSaving(true);
@@ -55,10 +60,10 @@ export default function M04CBC() {
       <Progress n={i + 1} of={tasks.length} />
       <SectionIntro kind="choices" title={COPY.cbcPrompt} description="هر بسته را با همهٔ ویژگی‌ها و قیمت ماهانه‌اش بسنج. ابتدا مناسب‌ترین را انتخاب کن؛ سپس بگو آیا واقعاً آن را می‌خریدی. انتخاب اینجا هیچ تعهد خریدی ایجاد نمی‌کند." step={`مقایسهٔ بسته‌ها · ${fa(i + 1)} از ${fa(tasks.length)}`} />
 
-      <div className="packs">
+      <div className="packs" aria-label="سه بسته برای مقایسه">
         {task.profiles.map((prof, k) => (
           <button key={k} type="button" className="pack" aria-pressed={chosen === k}
-                  disabled={saving} onClick={() => { if (firstTap.current === null) firstTap.current = Math.round(performance.now() - t0.current); setChosen(k); }}>
+                  disabled={saving} onClick={() => select(k)}>
             <span className="pack-title">بستهٔ {fa(k + 1)} <span>{chosen === k ? "✓ انتخاب شما" : "برای انتخاب بزن"}</span></span>
             <span className="package-object" aria-hidden="true"><i /><i /><i /></span>
             {ATTRIBUTES.slice(0, 5).map((a, ai) => (
@@ -76,6 +81,29 @@ export default function M04CBC() {
             </div>
           </button>
         ))}
+      </div>
+
+      <div className="comparison-matrix" role="group" aria-label="مقایسهٔ سه بسته">
+        <div className="matrix-corner" aria-hidden="true">ویژگی</div>
+        {task.profiles.map((_, k) => <div className="matrix-heading" key={`head-${k}`}>بستهٔ {fa(k + 1)}</div>)}
+        {ATTRIBUTES.slice(0, 5).map((a, ai) => <div className="matrix-row" key={a.id}>
+          <div className="matrix-label"><span aria-hidden>{a.icon}</span>{a.label}</div>
+          {task.profiles.map((prof, k) => <div className="matrix-value" key={`${a.id}-${k}`}>{a.levels[prof[ai]]}</div>)}
+        </div>)}
+        <div className="matrix-row matrix-price-row">
+          <div className="matrix-label">هزینهٔ ماهانه</div>
+          {task.profiles.map((prof, k) => <div className="matrix-value" key={`price-${k}`}>
+            <strong>{fa(priceToman(PRICE_MULT[prof[5]], refToman))}</strong>
+            <small>تومان · {fa(PRICE_MULT[prof[5]])} {refItem}</small>
+          </div>)}
+        </div>
+        <div className="matrix-row matrix-action-row">
+          <div className="matrix-label">انتخاب</div>
+          {task.profiles.map((_, k) => <button key={`pick-${k}`} className="matrix-pick" type="button"
+            aria-pressed={chosen === k} disabled={saving} onClick={() => select(k)}>
+            {chosen === k ? "✓ انتخاب شد" : `بستهٔ ${fa(k + 1)}`}
+          </button>)}
+        </div>
       </div>
 
       {/* SPEC 2.4 dual-response none -- yields far more than a third "none" card,

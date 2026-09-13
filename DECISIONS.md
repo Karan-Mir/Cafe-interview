@@ -12,3 +12,10 @@ The user requested a full usability, Persian copy, and visual refinement, while 
 - Screen changes reset scroll to the instructions. The final screen provides an explicit, PIN-gated observation entry button in addition to the existing long-press shortcut.
 
 Verification: production TypeScript/Vite/PWA build; browser walkthrough covering setup, all four profile steps, all 12 MaxDiff sets, ten-coin allocation, all 14 CBC tasks, text response, benchmark empty state, and mutually exclusive pilot choices. QA session is labeled ui-review-test and analysis consent is disabled. Physical microphone capture requires a device check; no microphone permission was granted during automated QA.
+
+## Design-system and motion revision — September 13, 2026
+
+- Added `DESIGN.md` as the visual and interaction contract. Consolidated the active palette into one token source and raised low-contrast secondary colors.
+- MaxDiff retains all fixed items and response logic but uses a compact 2x2 phone comparison. CBC retains the fixed profiles, position randomisation and stored indices but uses a neutral three-column matrix in phone portrait. Exceptionally narrow screens request landscape.
+- GSAP replaces the unused Framer Motion dependency for the welcome sculpture, coin feedback and reveal choreography. Research alternatives never receive staggered or unequal motion; CSS remains responsible for immediate control feedback.
+- Full-screen interruption, PIN, archive and resume surfaces now use labelled modal semantics, focus containment and focus restoration. Disabled next actions explain what information remains.

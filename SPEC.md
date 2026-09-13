@@ -589,7 +589,9 @@ is not gamification, it is bias.
 ## 8. Technical
 
 - **Stack** Vite + React 18 + TypeScript. Zustand for session state. Dexie over
-  IndexedDB. Framer Motion for transitions. No UI kit — the design language is small.
+  IndexedDB. GSAP for choreographed transitions; CSS for immediate control feedback.
+  No UI kit — the design language is small. Research alternatives must always receive
+  equal motion treatment; see `DESIGN.md`.
 - **PWA** Workbox service worker, `display: fullscreen`, installable, full offline. All
   assets precached. Verify with DevTools offline mode as an acceptance test.
 - **Fonts** Vazirmatn, self-hosted as woff2 in `public/fonts`. **No CDN** — the app must

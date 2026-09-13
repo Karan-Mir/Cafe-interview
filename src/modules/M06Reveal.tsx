@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { useSession } from "../core/store";
 import { COPY } from "../content/items";
 import { fa } from "../core/fa";
@@ -21,6 +23,7 @@ const BARS: { key: string; label: string; get: (s: Record<string, unknown>) => n
  *  handful of cafés is not the market, and saying so is also the most persuasive
  *  possible argument for bringing a friend. */
 export default function M06Reveal() {
+  const screen = useRef<HTMLDivElement>(null);
   const s = useSession((st) => st.session)!;
   const patch = useSession((st) => st.patch);
   const goto = useSession((st) => st.goto);
@@ -29,9 +32,20 @@ export default function M06Reveal() {
   const thin = n < 12;
   const [ref1, setRef1] = useState(s.close.referrals[0] ?? ""); const [ref2, setRef2] = useState(s.close.referrals[1] ?? "");
 
+  useGSAP(() => {
+    if (step !== 0) return;
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const timeline = gsap.timeline({ defaults: { ease: "power2.out" } });
+      timeline.from(".bar", { autoAlpha: 0, y: 12, duration: .36, stagger: .07 })
+        .from(".bar .you", { scaleY: 0, transformOrigin: "center bottom", duration: .42, stagger: .05 }, "<.12");
+    });
+    return () => mm.revert();
+  }, { scope: screen, dependencies: [step], revertOnUpdate: true });
+
   if (step === 0) {
     return (
-      <div className="screen">
+      <div ref={screen} className="screen reveal-screen">
         <SectionIntro kind="report" title="کارت کافهٔ تو" description="این خلاصه از پاسخ‌های خودت ساخته شده است. مقایسه با کافه‌های دیگر فقط وقتی نمایش داده می‌شود که دادهٔ واقعی برای آن داشته باشیم؛ بیشتر یا کمتر بودن هیچ‌کدام به معنی بهتر یا بدتر بودن نیست." step={COPY.revealTitle} />
 
         {thin && (

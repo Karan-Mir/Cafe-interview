@@ -42,5 +42,19 @@ export default defineConfig({
       },
     }),
   ],
-  build: { target: "es2022", sourcemap: true },
+  build: {
+    target: "es2022",
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+          if (id.includes("@supabase")) return "vendor-supabase";
+          if (id.includes("gsap")) return "vendor-gsap";
+          if (id.includes("react") || id.includes("zustand")) return "vendor-react";
+          if (id.includes("dexie")) return "vendor-db";
+        },
+      },
+    },
+  },
 });

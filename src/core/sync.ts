@@ -1,5 +1,6 @@
 import { db } from "./db";
 import { supabase, isConfigured } from "./supabase";
+import { deviceId, pending } from "./outbox";
 
 /**
  * Upload. Online is the source of truth; the phone keeps an outbox.
@@ -16,24 +17,6 @@ import { supabase, isConfigured } from "./supabase";
  */
 
 export interface SyncResult { uploaded: number; failed: number; errors: string[]; }
-
-const LS_DEVICE = "qz.device";
-
-export function deviceId(): string {
-  return localStorage.getItem(LS_DEVICE) ?? "";
-}
-export function setDeviceId(v: string) {
-  localStorage.setItem(LS_DEVICE, v.trim());
-}
-
-/** Sessions finished on this phone that the server has not confirmed. */
-export async function pending() {
-  return (await db.sessions.toArray()).filter((s) => s.finished_at && !s.synced_at);
-}
-
-export async function pendingCount(): Promise<number> {
-  return (await pending()).length;
-}
 
 /** Push everything outstanding. Safe to call as often as you like. */
 export async function syncNow(): Promise<SyncResult> {

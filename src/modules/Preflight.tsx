@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useSession } from "../core/store";
 import { Chip, Field } from "../ui/bits";
 import { fa } from "../core/fa";
-import { pendingCount, deviceId, setDeviceId } from "../core/sync";
+import { pendingCount, deviceId, setDeviceId } from "../core/outbox";
 import { SectionIntro } from "../ui/Illustration";
 
 const ITEMS = ["اسپرسو", "قهوهٔ ساده", "چای"];
@@ -26,6 +26,12 @@ export default function Preflight({ onReady, tools }: { onReady: (pin: string) =
   // A phone with no name produces rows nobody can attribute. Required.
   const ready = who.trim().length >= 2 && device.trim().length >= 2
     && pin.length >= 4 && toman >= 10000;
+  const missing = [
+    who.trim().length < 2 ? "حروف اول نام" : "",
+    device.trim().length < 2 ? "کد گوشی" : "",
+    pin.length < 4 ? "رمز چهاررقمی" : "",
+    toman < 10000 ? "قیمت منو" : "",
+  ].filter(Boolean);
 
   return (
     <div className="screen preflight-screen">
@@ -83,11 +89,12 @@ export default function Preflight({ onReady, tools }: { onReady: (pin: string) =
 
       <div className="preflight-actions">
         <div className="foot">
-          <button className="btn primary" disabled={!ready}
+          <button className="btn primary" disabled={!ready} aria-describedby={!ready ? "preflight-missing" : undefined}
                   onClick={async () => { await begin(who.trim(), device.trim(), item, toman); onReady(pin); }}>
             شروع جلسه
           </button>
         </div>
+        {!ready && <p id="preflight-missing" className="action-hint" role="status">برای شروع، این موارد را کامل کنید: {missing.join("، ")}.</p>}
         {tools}
       </div>
     </div>

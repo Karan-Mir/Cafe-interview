@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DialogOverlay from "./DialogOverlay";
 
 /**
  * SPEC 2.4 -- the three packages have to be visible AT ONCE. Measured on a
@@ -23,16 +24,17 @@ export default function RotateHint() {
     };
   }, []);
 
-  if (!portrait) return null;
+  // Portrait now has a purpose-built comparison matrix. Keep this hint only for
+  // exceptionally narrow devices where three readable columns cannot fit.
+  if (!portrait || window.innerWidth >= 340) return null;
 
   return (
-    <div className="overlay" role="alertdialog" aria-live="polite">
+    <DialogOverlay alert title="گوشی را بچرخان">
       <div style={{ fontSize: "3.5rem", lineHeight: 1 }} aria-hidden>⟳</div>
-      <h2>گوشی را بچرخان</h2>
       <p className="muted" style={{ maxWidth: "22rem" }}>
         این صفحه سه بسته را کنار هم نشان می‌دهد. برای اینکه بتوانی هر سه را با هم
         ببینی و مقایسه کنی، گوشی را افقی بگیر.
       </p>
-    </div>
+    </DialogOverlay>
   );
 }

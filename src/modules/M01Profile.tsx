@@ -76,11 +76,12 @@ export default function M01Profile() {
 
       <div className="foot">
         {step > 0 && <button className="btn ghost" onClick={() => goto("profile", step - 1)}>{COPY.back}</button>}
-        <button className="btn primary" disabled={!done}
+        <button className="btn primary" disabled={!done} aria-describedby={!done ? "profile-next-hint" : undefined}
                 onClick={() => (step < 3 ? goto("profile", step + 1) : goto("maxdiff", 0))}>
           {COPY.next}
         </button>
       </div>
+      {!done && <p id="profile-next-hint" className="action-hint" role="status">برای ادامه، به همهٔ سؤال‌های این بخش جواب بده.</p>}
     </div>
   );
 }

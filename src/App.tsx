@@ -1,24 +1,28 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useSession } from "./core/store";
 import { verifyDesigns } from "./core/designs";
 import { allSessions, unfinished } from "./core/db";
 import { exportSession, exportAll } from "./core/export";
-import { syncInBackground, pendingCount } from "./core/sync";
+import { pendingCount } from "./core/outbox";
 import { COPY } from "./content/items";
 import { fa } from "./core/fa";
 import type { Session } from "./core/types";
 
 import Preflight from "./modules/Preflight";
-import M00Open from "./modules/M00Open";
-import M01Profile from "./modules/M01Profile";
-import M02MaxDiff from "./modules/M02MaxDiff";
-import M03Coins from "./modules/M03Coins";
-import M04CBC from "./modules/M04CBC";
-import M05Voice from "./modules/M05Voice";
-import M06Reveal from "./modules/M06Reveal";
-import M07Observe from "./modules/M07Observe";
-import AdminPanel from "./modules/AdminPanel";
 import RotateHint from "./ui/RotateHint";
+import DialogOverlay from "./ui/DialogOverlay";
+
+const M00Open = lazy(() => import("./modules/M00Open"));
+const M01Profile = lazy(() => import("./modules/M01Profile"));
+const M02MaxDiff = lazy(() => import("./modules/M02MaxDiff"));
+const M03Coins = lazy(() => import("./modules/M03Coins"));
+const M04CBC = lazy(() => import("./modules/M04CBC"));
+const M05Voice = lazy(() => import("./modules/M05Voice"));
+const M06Reveal = lazy(() => import("./modules/M06Reveal"));
+const M07Observe = lazy(() => import("./modules/M07Observe"));
+const AdminPanel = lazy(() => import("./modules/AdminPanel"));
+
+const loading = <div className="overlay" role="status" aria-live="polite"><p>در حال آماده‌سازی صفحه…</p></div>;
 
 type Gate = { ok: boolean; detail: string } | null;
 
@@ -46,8 +50,9 @@ export default function App() {
   // The backend, such as it is. Fire-and-forget: nothing on screen ever awaits
   // it, and a dead network costs a delay, never a session (SPEC 0.4).
   useEffect(() => {
-    syncInBackground();
-    const back = () => syncInBackground();
+    const sync = () => { void import("./core/sync").then(({ syncInBackground }) => syncInBackground()); };
+    sync();
+    const back = () => sync();
     window.addEventListener("online", back);
     return () => window.removeEventListener("online", back);
   }, []);
@@ -65,29 +70,27 @@ export default function App() {
   // Each new question starts at its instructions, including on narrow screens.
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [session?.cursor.module, session?.cursor.step]);
 
-  if (!gate) return <div className="overlay"><p>…</p></div>;
+  if (!gate) return <div className="overlay" role="status" aria-live="polite"><p>در حال بررسی فایل‌های طرح…</p></div>;
 
   if (!gate.ok) {
     return (
-      <div className="overlay">
-        <h2 style={{ color: "var(--risk)" }}>فایل طرح با امضای خودش نمی‌خواند</h2>
+      <DialogOverlay alert title="فایل طرح با امضای خودش نمی‌خواند">
         <p className="small muted" style={{ maxWidth: "28rem" }}>
           این تبلت نسخهٔ متفاوتی از طرح را حمل می‌کند. اگر با این نسخه مصاحبه بگیرید،
           داده‌ها با بقیهٔ تبلت‌ها قابل ادغام نخواهد بود و هیچ هشداری هم در تحلیل
           ظاهر نمی‌شود. تا جایگزینی فایل، مصاحبه نگیرید.
         </p>
         <code className="small">{gate.detail}</code>
-      </div>
+      </DialogOverlay>
     );
   }
 
   if (!session) {
-    if (syncing) return <AdminPanel onDone={() => setSyncing(false)} />;
+    if (syncing) return <Suspense fallback={loading}><AdminPanel onDone={() => setSyncing(false)} /></Suspense>;
     return (
       <>
         {resumable && (
-          <div className="overlay">
-            <h2>یک جلسهٔ ناتمام هست</h2>
+          <DialogOverlay title="یک جلسهٔ ناتمام هست">
             <p className="small muted">
               شروع {new Date(resumable.started_at).toLocaleString("fa-IR")}
             </p>
@@ -97,7 +100,7 @@ export default function App() {
               </button>
               <button className="btn ghost" onClick={() => setResumable(null)}>جلسهٔ تازه</button>
             </div>
-          </div>
+          </DialogOverlay>
         )}
         <Preflight onReady={setPin} tools={
           /* The admin panel is gated by the Supabase login, which is a stronger
@@ -114,9 +117,8 @@ export default function App() {
           </nav>
         } />
         {showAdmin && (
-          <div className="overlay" style={{ placeItems: "start", overflow: "auto" }}>
+          <DialogOverlay className="overlay-start" title="جلسه‌های ذخیره‌شده" onEscape={() => setShowAdmin(false)}>
             <div className="screen">
-              <h2>جلسه‌های ذخیره‌شده</h2>
               <p className="small muted">
                 {fa(all.length)} جلسه — {fa(all.filter((s) => !s.exported_at).length)} هنوز خروجی نگرفته
               </p>
@@ -138,7 +140,7 @@ export default function App() {
                 <button className="btn ghost" onClick={() => setShowAdmin(false)}>بستن</button>
               </div>
             </div>
-          </div>
+          </DialogOverlay>
         )}
       </>
     );
@@ -150,20 +152,18 @@ export default function App() {
   // exactly is worth more than any animation.
   if (paused) {
     return (
-      <div className="overlay">
-        <h2>{COPY.paused}</h2>
+      <DialogOverlay title={COPY.paused}>
         <button className="btn primary" onClick={() => setPaused(false)}>{COPY.resume}</button>
-      </div>
+      </DialogOverlay>
     );
   }
 
-  if (observing) return <M07Observe onDone={() => { setObserving(false); }} />;
-  if (syncing) return <AdminPanel onDone={() => { setSyncing(false); }} />;
+  if (observing) return <Suspense fallback={loading}><M07Observe onDone={() => { setObserving(false); }} /></Suspense>;
+  if (syncing) return <Suspense fallback={loading}><AdminPanel onDone={() => { setSyncing(false); }} /></Suspense>;
 
   if (askPin) {
     return (
-      <div className="overlay">
-        <h2>ورود به بخش مشاهده</h2>
+      <DialogOverlay title="ورود به بخش مشاهده" onEscape={() => { setAskPin(false); setPinTry(""); }}>
         <p className="helper">رمزی را که هنگام آماده‌سازی جلسه انتخاب کردید وارد کنید.</p>
         <input aria-label="رمز جلسه" type="password" className="chip" inputMode="numeric" value={pinTry} autoFocus
                style={{ fontSize: "1.6rem", textAlign: "center", letterSpacing: ".4em" }}
@@ -176,7 +176,7 @@ export default function App() {
                  }
                }} />
         <button className="btn ghost" onClick={() => { setAskPin(false); setPinTry(""); }}>انصراف</button>
-      </div>
+      </DialogOverlay>
     );
   }
 
@@ -211,7 +211,7 @@ export default function App() {
                 onClick={() => setPaused(true)}>{COPY.pause}</button>
       )}
       </nav>
-      {body}
+      <Suspense fallback={loading}>{body}</Suspense>
       {m === "cbc" && <RotateHint />}
     </>
   );
