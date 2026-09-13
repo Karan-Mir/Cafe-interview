@@ -17,7 +17,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["fonts/**/*"],
       workbox: {
-        globPatterns: ["**/*.{js,css,html,woff2,json,svg,png}"],
+        globPatterns: ["**/*.{js,css,html,woff2,json,svg,png,webp}"],
         navigateFallback: base + "index.html",
       },
       manifest: {
