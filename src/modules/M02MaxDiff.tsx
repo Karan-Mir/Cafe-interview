@@ -55,8 +55,8 @@ export default function M02MaxDiff() {
                 </div>
               </div>
               <div className="choice-actions">
-                <button className="choice-toggle choice-best" aria-pressed={best === it} disabled={saving} onClick={() => { setBest(best === it ? null : it); if (worst === it) setWorst(null); }} aria-label={`${MAXDIFF_ITEMS[it].title}: ${COPY.maxdiffBest}`}><span className="choice-symbol">↑</span>{COPY.maxdiffBest}</button>
-                <button className="choice-toggle choice-worst" aria-pressed={worst === it} disabled={saving} onClick={() => { setWorst(worst === it ? null : it); if (best === it) setBest(null); }} aria-label={`${MAXDIFF_ITEMS[it].title}: ${COPY.maxdiffWorst}`}><span className="choice-symbol">↓</span>{COPY.maxdiffWorst}</button>
+                <button className="choice-toggle choice-best" aria-pressed={best === it} disabled={saving} onClick={() => { setBest(best === it ? null : it); if (worst === it) setWorst(null); }} aria-label={`${MAXDIFF_ITEMS[it].title}: ${COPY.maxdiffBest}`}><span className="choice-symbol" aria-hidden>↑</span><span className="choice-label">{COPY.maxdiffBest}</span></button>
+                <button className="choice-toggle choice-worst" aria-pressed={worst === it} disabled={saving} onClick={() => { setWorst(worst === it ? null : it); if (best === it) setBest(null); }} aria-label={`${MAXDIFF_ITEMS[it].title}: ${COPY.maxdiffWorst}`}><span className="choice-symbol" aria-hidden>↓</span><span className="choice-label">{COPY.maxdiffWorst}</span></button>
               </div>
             </div>
           );
