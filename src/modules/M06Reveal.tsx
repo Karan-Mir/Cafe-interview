@@ -112,9 +112,10 @@ export default function M06Reveal() {
       </div>
 
       <div className="foot">
+        <button className="btn ghost" onClick={() => goto("reveal", 0)}>{COPY.back}</button>
         <button className="btn primary" onClick={async () => {
           await patch((d) => { d.close.referrals = [ref1, ref2].filter((x) => x.trim()); });
-          goto("done", 0);
+          await goto("done", 0);
         }}>پایان و تحویل تبلت</button>
       </div>
     </div>

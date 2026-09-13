@@ -220,6 +220,7 @@ export default function App() {
 function Done({ onObserve, pending, onSync }:
                { onObserve: () => void; pending: number; onSync: () => void }) {
   const s = useSession((st) => st.session)!;
+  const goto = useSession((st) => st.goto);
   const [saved, setSaved] = useState(!!s.exported_at);
   return (
     <div className="screen done-screen" style={{ justifyContent: "center", textAlign: "center" }}>
@@ -233,6 +234,7 @@ function Done({ onObserve, pending, onSync }:
         </div>
       )}
       <div className="foot" style={{ flexDirection: "column" }}>
+        <button className="btn ghost" onClick={() => goto("reveal", 1)}>بازگشت به سؤال‌های پایانی</button>
         <button className="btn ghost" onClick={onObserve}>ورود مصاحبه‌گر به بخش مشاهده</button>
         <button className="btn ghost" style={{ marginTop: ".5rem" }} onClick={onSync}>
           پنل همگام‌سازی{pending > 0 ? ` (${new Intl.NumberFormat("fa-IR").format(pending)})` : ""}
