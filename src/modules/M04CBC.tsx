@@ -5,6 +5,8 @@ import { fa, priceToman } from "../core/fa";
 import { Progress } from "../ui/bits";
 import { SectionIntro } from "../ui/Illustration";
 
+const BUNDLE_IMAGES = [1, 2, 3].map((number) => `${import.meta.env.BASE_URL}images/bundles/bundle-${number}.webp`);
+
 /**
  * SPEC 2.4 -- the core. 14 screens: 10 design + 2 holdout + 2 trap, in a shuffled
  * order OF THE FIXED SET. Card positions are shuffled per task to kill position
@@ -65,7 +67,7 @@ export default function M04CBC() {
           <button key={k} type="button" className="pack" aria-pressed={chosen === k}
                   disabled={saving} onClick={() => select(k)}>
             <span className="pack-title">بستهٔ {fa(k + 1)} <span>{chosen === k ? "✓ انتخاب شما" : "برای انتخاب بزن"}</span></span>
-            <span className="package-object" aria-hidden="true"><i /><i /><i /></span>
+            <img className="bundle-art bundle-art-wide" src={BUNDLE_IMAGES[k]} alt="" aria-hidden="true" />
             {ATTRIBUTES.slice(0, 5).map((a, ai) => (
               <div className="row" key={a.id}>
                 <span className="ic" aria-hidden>{a.icon}</span>
@@ -83,33 +85,26 @@ export default function M04CBC() {
         ))}
       </div>
 
-      <div className="comparison-matrix" role="table" aria-label="مقایسهٔ سه بسته">
-        <div className="matrix-header" role="row">
-          <div className="matrix-corner" role="columnheader">ویژگی‌ها</div>
-          {task.profiles.map((_, k) => <div className="matrix-heading" role="columnheader" key={`head-${k}`}>
-            <span className="package-number">{fa(k + 1)}</span><span>بسته</span>
-          </div>)}
-        </div>
-        {ATTRIBUTES.slice(0, 5).map((a, ai) => <div className="matrix-row" role="row" key={a.id}>
-          <div className="matrix-label" role="rowheader"><span className="matrix-icon" aria-hidden>{a.icon}</span><span>{a.label}</span></div>
-          {task.profiles.map((prof, k) => <div className="matrix-value" role="cell" key={`${a.id}-${k}`}>{a.levels[prof[ai]]}</div>)}
-        </div>)}
-        <div className="matrix-row matrix-price-row" role="row">
-          <div className="matrix-label" role="rowheader"><span className="matrix-icon" aria-hidden>◆</span><span>هزینهٔ ماهانه</span></div>
-          {task.profiles.map((prof, k) => <div className="matrix-value" role="cell" key={`price-${k}`}>
-            <strong>{fa(priceToman(PRICE_MULT[prof[5]], refToman))}</strong>
-            <small>تومان</small><small>معادل {fa(PRICE_MULT[prof[5]])} {refItem}</small>
-          </div>)}
-        </div>
-        <div className="matrix-row matrix-action-row" role="row">
-          <div className="matrix-label" role="rowheader"><span className="matrix-icon" aria-hidden>✓</span><span>انتخاب من</span></div>
-          {task.profiles.map((_, k) => <div className="matrix-action-cell" role="cell" key={`pick-${k}`}>
-            <button className="matrix-pick" type="button" aria-pressed={chosen === k} disabled={saving} onClick={() => select(k)}>
-              <span className="pick-dot" aria-hidden>{chosen === k ? "✓" : fa(k + 1)}</span>
-              <span>{chosen === k ? "انتخاب شد" : "انتخاب"}</span>
-            </button>
-          </div>)}
-        </div>
+      <div className="bundle-panels" role="group" aria-label="سه بسته برای مقایسه">
+        {task.profiles.map((prof, k) => <button key={`mobile-${k}`} type="button" className="bundle-panel"
+          aria-pressed={chosen === k} disabled={saving} onClick={() => select(k)}>
+          <span className="bundle-image-wrap">
+            <img className="bundle-art" src={BUNDLE_IMAGES[k]} alt="" aria-hidden="true" />
+            <span className="bundle-number">بستهٔ {fa(k + 1)}</span>
+          </span>
+          <span className="bundle-body">
+            <span className="bundle-state">{chosen === k ? "✓ این بسته را انتخاب کردی" : "برای انتخاب، این پنل را بزن"}</span>
+            {ATTRIBUTES.slice(0, 5).map((a, ai) => <span className="bundle-feature" key={a.id}>
+              <span className="bundle-feature-label"><span aria-hidden>{a.icon}</span>{a.label}</span>
+              <strong>{a.levels[prof[ai]]}</strong>
+            </span>)}
+            <span className="bundle-price">
+              <span>هزینهٔ ماهانه</span>
+              <strong>{fa(priceToman(PRICE_MULT[prof[5]], refToman))} تومان</strong>
+              <small>معادل {fa(PRICE_MULT[prof[5]])} {refItem} در ماه</small>
+            </span>
+          </span>
+        </button>)}
       </div>
 
       {/* SPEC 2.4 dual-response none -- yields far more than a third "none" card,

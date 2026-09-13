@@ -47,7 +47,7 @@ its peers. `prefers-reduced-motion: reduce` removes all non-essential movement.
 ## Responsive rules
 
 - MaxDiff remains a four-way 2x2 comparison on common phone widths.
-- CBC uses a three-column comparison deck with separate feature bands in phone portrait and equal cards elsewhere.
+- CBC presents three complete, independent bundle panels. Each panel contains a distinct but equally weighted neutral illustration, its full feature set, monthly price, and selection state; narrow phones stack the panels for readable Persian while tablets retain a three-panel view.
 - Under 340px, ask for landscape rather than presenting an unreadable comparison.
 - Artwork never sits in front of copy and all flex/grid children permit shrinking.
 
