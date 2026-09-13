@@ -83,26 +83,32 @@ export default function M04CBC() {
         ))}
       </div>
 
-      <div className="comparison-matrix" role="group" aria-label="مقایسهٔ سه بسته">
-        <div className="matrix-corner" aria-hidden="true">ویژگی</div>
-        {task.profiles.map((_, k) => <div className="matrix-heading" key={`head-${k}`}>بستهٔ {fa(k + 1)}</div>)}
-        {ATTRIBUTES.slice(0, 5).map((a, ai) => <div className="matrix-row" key={a.id}>
-          <div className="matrix-label"><span aria-hidden>{a.icon}</span>{a.label}</div>
-          {task.profiles.map((prof, k) => <div className="matrix-value" key={`${a.id}-${k}`}>{a.levels[prof[ai]]}</div>)}
-        </div>)}
-        <div className="matrix-row matrix-price-row">
-          <div className="matrix-label">هزینهٔ ماهانه</div>
-          {task.profiles.map((prof, k) => <div className="matrix-value" key={`price-${k}`}>
-            <strong>{fa(priceToman(PRICE_MULT[prof[5]], refToman))}</strong>
-            <small>تومان · {fa(PRICE_MULT[prof[5]])} {refItem}</small>
+      <div className="comparison-matrix" role="table" aria-label="مقایسهٔ سه بسته">
+        <div className="matrix-header" role="row">
+          <div className="matrix-corner" role="columnheader">ویژگی‌ها</div>
+          {task.profiles.map((_, k) => <div className="matrix-heading" role="columnheader" key={`head-${k}`}>
+            <span className="package-number">{fa(k + 1)}</span><span>بسته</span>
           </div>)}
         </div>
-        <div className="matrix-row matrix-action-row">
-          <div className="matrix-label">انتخاب</div>
-          {task.profiles.map((_, k) => <button key={`pick-${k}`} className="matrix-pick" type="button"
-            aria-pressed={chosen === k} disabled={saving} onClick={() => select(k)}>
-            {chosen === k ? "✓ انتخاب شد" : `بستهٔ ${fa(k + 1)}`}
-          </button>)}
+        {ATTRIBUTES.slice(0, 5).map((a, ai) => <div className="matrix-row" role="row" key={a.id}>
+          <div className="matrix-label" role="rowheader"><span className="matrix-icon" aria-hidden>{a.icon}</span><span>{a.label}</span></div>
+          {task.profiles.map((prof, k) => <div className="matrix-value" role="cell" key={`${a.id}-${k}`}>{a.levels[prof[ai]]}</div>)}
+        </div>)}
+        <div className="matrix-row matrix-price-row" role="row">
+          <div className="matrix-label" role="rowheader"><span className="matrix-icon" aria-hidden>◆</span><span>هزینهٔ ماهانه</span></div>
+          {task.profiles.map((prof, k) => <div className="matrix-value" role="cell" key={`price-${k}`}>
+            <strong>{fa(priceToman(PRICE_MULT[prof[5]], refToman))}</strong>
+            <small>تومان</small><small>معادل {fa(PRICE_MULT[prof[5]])} {refItem}</small>
+          </div>)}
+        </div>
+        <div className="matrix-row matrix-action-row" role="row">
+          <div className="matrix-label" role="rowheader"><span className="matrix-icon" aria-hidden>✓</span><span>انتخاب من</span></div>
+          {task.profiles.map((_, k) => <div className="matrix-action-cell" role="cell" key={`pick-${k}`}>
+            <button className="matrix-pick" type="button" aria-pressed={chosen === k} disabled={saving} onClick={() => select(k)}>
+              <span className="pick-dot" aria-hidden>{chosen === k ? "✓" : fa(k + 1)}</span>
+              <span>{chosen === k ? "انتخاب شد" : "انتخاب"}</span>
+            </button>
+          </div>)}
         </div>
       </div>
 

@@ -47,7 +47,7 @@ its peers. `prefers-reduced-motion: reduce` removes all non-essential movement.
 ## Responsive rules
 
 - MaxDiff remains a four-way 2x2 comparison on common phone widths.
-- CBC uses a three-column comparison matrix in phone portrait and equal cards elsewhere.
+- CBC uses a three-column comparison deck with separate feature bands in phone portrait and equal cards elsewhere.
 - Under 340px, ask for landscape rather than presenting an unreadable comparison.
 - Artwork never sits in front of copy and all flex/grid children permit shrinking.
 
