@@ -3,7 +3,7 @@
 
 Produces two JSON files consumed by the tablet app:
 
-  maxdiff_design.json  14 items, sets of 4, 12 sets per version, 6 versions
+  maxdiff_design.json  15 items, sets of 4, 12 sets per version, 6 versions
   cbc_design.json      6 attributes, 3 alternatives, 10 tasks, 20 versions
                        + 2 fixed holdout tasks + 1 trap task
 
@@ -59,7 +59,14 @@ def verify(path: str) -> bool:
 RNG = np.random.default_rng(20260912)
 random.seed(20260912)
 
-DESIGN_VERSION = "2026-09-12"
+DESIGN_DATE = "2026-09-14"
+# DESIGN_VERSION is completed once the structure is known (after ATTRS below).
+# It carries a fingerprint of the SHAPE -- attributes, level counts, tasks,
+# alternatives, MaxDiff items -- so two designs of different shape can never
+# share a version string. Sessions store this and analyse.py refuses to pool
+# across versions, which only protects anything if the string actually moves.
+# It did not: --force claimed to bump the version and never did.
+DESIGN_VERSION = None
 
 MD_PATH = None   # set after OUT is known
 CBC_PATH = None
@@ -83,7 +90,7 @@ if not {"--force"} & set(sys.argv) and all(os.path.exists(p) for p in (MD_PATH, 
     sys.exit(1)
 
 # ══════════════════════════════════════════════════════════ MaxDiff (BIBD-ish)
-N_ITEMS, SET_SIZE, N_SETS, N_VERSIONS = 14, 4, 12, 6
+N_ITEMS, SET_SIZE, N_SETS, N_VERSIONS = 15, 4, 12, 6
 
 
 def maxdiff_stats(design):
@@ -164,16 +171,22 @@ print(f"  pairwise co-occurrence             : min {off_pairs.min():.0f}  max {o
 
 # ══════════════════════════════════════════════════════════════════════ CBC
 ATTRS = [
-    ("job",      5),   # core job the product does
+    ("job",      6),   # core job the product does
     ("input",    4),   # how data gets in
     ("delivery", 4),   # how the answer arrives
     ("who",      3),   # automation vs human
     ("commit",   3),   # contract length
-    ("price",    5),   # price in barista-shift units
+    ("price",    5),   # multiples of the cafe's own reference item (SPEC 3.6.6)
 ]
-N_ALTS, N_TASKS, N_CBC_VERSIONS = 3, 10, 20
+# 12 design tasks, not 10: with c=6 the Johnson-Orme floor is 500*6/(t*3),
+# which is 100 respondents at t=10 and 84 at t=12. See SPEC 4.
+N_ALTS, N_TASKS, N_CBC_VERSIONS = 3, 12, 20
 LEVELS = [n for _, n in ATTRS]
 K = sum(n - 1 for n in LEVELS)            # effects-coded parameters
+
+_shape = repr((ATTRS, N_ALTS, N_TASKS, N_CBC_VERSIONS,
+               N_ITEMS, SET_SIZE, N_SETS, N_VERSIONS)).encode()
+DESIGN_VERSION = f"{DESIGN_DATE}-{hashlib.sha256(_shape).hexdigest()[:6]}"
 
 
 def effects_row(profile):
@@ -284,8 +297,18 @@ for ver in cbc_versions:
 print("\n── CBC ─────────────────────────────────────────────────")
 print(f"  versions {N_CBC_VERSIONS} · tasks/version {N_TASKS} · alternatives {N_ALTS}")
 print(f"  effects-coded parameters: {K}")
-print(f"  D-error  optimised mean {np.mean(cbc_errs):.4f}   random mean {np.mean(base_errs):.4f}"
-      f"   → {(np.mean(base_errs)/np.mean(cbc_errs)-1)*100:.0f}% better")
+# A random version is sometimes SINGULAR -- 19 parameters, and one version
+# contributes rank at most N_TASKS*(N_ALTS-1). derr_from_M returns a 1e9 sentinel
+# for those, so averaging it is meaningless: one bad draw moves the mean by 5e7.
+# Report the median (robust to the sentinel) and count the singular draws, which
+# are themselves the point: a random design can fail to be estimable at all.
+_singular = sum(1 for e in base_errs if e >= 1e9)
+_finite = [e for e in base_errs if e < 1e9]
+_opt_med, _rnd_med = float(np.median(cbc_errs)), float(np.median(_finite))
+print(f"  D-error  optimised median {_opt_med:.4f}   random median {_rnd_med:.4f}"
+      f"   → {_rnd_med/_opt_med:.2f}x better")
+print(f"  random versions that were singular (not estimable at all): "
+      f"{_singular} of {len(base_errs)}")
 for (name, n), c in zip(ATTRS, lvl_counts):
     tgt = c.sum() / n
     print(f"  level balance {name:9s} target {tgt:5.0f}   min {c.min():4.0f}  max {c.max():4.0f}")
@@ -298,8 +321,8 @@ print(f"  max |correlation| between attributes: {np.abs(off).max():.3f}")
 
 # Johnson–Orme rule of thumb for the minimum respondents
 c_max = max(LEVELS)
-n_min = 500 * c_max / (N_TASKS * N_ALTS)
-print(f"  Johnson–Orme minimum n for main effects: {n_min:.0f} respondents")
+n_min = math.ceil(500 * c_max / (N_TASKS * N_ALTS))   # a floor rounds UP
+print(f"  Johnson–Orme minimum n for main effects: {n_min} respondents")
 
 # ─────────────────────────────────────────────── holdouts and the trap task
 HOLDOUTS = [
@@ -345,7 +368,9 @@ cbc_payload = {
         "alternatives": N_ALTS, "tasks_per_version": N_TASKS,
         "versions": N_CBC_VERSIONS, "parameters": K,
         "d_error_mean": round(float(np.mean(cbc_errs)), 5),
-        "d_error_random_baseline": round(float(np.mean(base_errs)), 5),
+        "d_error_random_baseline": round(_rnd_med, 5),
+        "d_error_random_singular": _singular,
+        "d_error_ratio_vs_random": round(_rnd_med / _opt_med, 3),
         "max_abs_attribute_correlation": round(float(np.abs(off).max()), 4),
         "johnson_orme_min_n": round(float(n_min)),
         "seed": 20260912,

@@ -57,7 +57,7 @@ ending feel like a gift rather than an exit.
 
 ## 2. Module flow
 
-Total target: **9–11 minutes**. Timings are budgets, not enforced limits — never show a
+Total target: **10–12 minutes**. Timings are budgets, not enforced limits — never show a
 countdown to the player.
 
 | # | Module | Budget | Screen count |
@@ -66,7 +66,7 @@ countdown to the player.
 | 1 | کارت کافه — profile card builder | 1:30 | 4 |
 | 2 | MaxDiff — «کدوم بیشتر، کدوم کمتر» | 3:00 | 12 |
 | 3 | سکه‌ها — coin allocation | 0:45 | 1 |
-| 4 | CBC — «کدوم بسته رو برمی‌داری» | 3:30 | 13 |
+| 4 | CBC — «کدوم بسته رو برمی‌داری» | 4:00 | 17 |
 | 5 | صدا — the open question | 1:00 | 1 |
 | 6 | کارت مقایسه — the reveal | 1:00 | 2 |
 | 7 | Observation (interviewer only) | 2:00 | 1, PIN-gated |
@@ -122,7 +122,9 @@ cannot be refused because it is never requested.
 
 ### 2.2 MaxDiff
 
-12 screens. Each shows 4 of the 14 items (§3.5) as large cards in a 2×2 grid.
+12 screens. Each shows 4 of the 15 items (§3.5) as large cards in a 2×2 grid.
+At 15 items each is shown 3.2 times per respondent; below about 3 the item-level
+estimates get thin, which caps the list at roughly 16.
 
 Interaction: tap once to mark **بهترین** (green outline, up chevron), tap a different
 card twice — or long-press — to mark **بی‌فایده‌ترین** (muted outline, down chevron).
@@ -138,8 +140,9 @@ assignment is desirable.
 
 ### 2.3 سکه‌ها — coin allocation
 
-One screen. Ten coin tokens, drag or tap-to-add onto the five *job* areas from §3.6.1.
-Must allocate exactly 10 before advancing; show remaining count, never a timer.
+One screen. Twelve coin tokens, drag or tap-to-add onto the six *job* areas from §3.6.1.
+Must allocate exactly 12 before advancing; show remaining count, never a timer.
+Twelve rather than ten because six areas divide it evenly and ten do not.
 
 > «ده تا سکه داری. بذارشون روی کاری که بیشتر از همه دلت می‌خواد حل بشه.»
 
@@ -149,7 +152,7 @@ switched off without a rebuild.
 
 ### 2.4 CBC — the core
 
-14 screens: 10 design tasks + 2 holdout tasks + **2 trap tasks**, in a randomised order
+16 screens: 12 design tasks + 2 holdout tasks + **2 trap tasks**, in a randomised order
 *of the fixed set* (the assignment of which tasks are holdouts/traps is fixed in the
 design file; only their position in the sequence varies).
 
@@ -166,7 +169,8 @@ is switched on, and nothing about the output looks wrong.
 
 Each screen shows 3 packages side by side as cards, each card listing the six attributes
 as icon + short label (§3.6). Price is the last row of each card, rendered in toman from
-the owner's own barista-shift figure, with the shift equivalent beneath it in small type.
+the café's own reference item (§3.6.6), with «به اندازهٔ N تا قهوه در ماه» beneath it in
+small type. It is **not** derived from any figure the owner supplies.
 
 > «کدوم رو برمی‌داری؟»
 
@@ -234,7 +238,7 @@ reveal is the only reason anyone plays. `analyse.py` lists any missing benchmark
 All UI copy is Persian, RTL. Keep sentences short and spoken — these are read off a
 tablet by someone who may be standing up.
 
-### 3.5 MaxDiff items (14)
+### 3.5 MaxDiff items (15)
 
 Index order is fixed and must match `maxdiff_design.json`.
 
@@ -269,17 +273,38 @@ gap that put the assistant into `delivery` above.
 | `job 0` قیمت و سود | 1 هشدار قیمت تمام‌شده · 2 منوی سودده · 11 ساعت‌های زیان‌ده |
 | `job 1` سفارش و انبار | 4 پیشنهاد سفارش · 5 ثبت ضایعات · 6 عکس فاکتور |
 | `job 2` شیفت و نیرو | 3 پیش‌بینی شلوغی · 12 چک‌لیست روزانه |
-| `job 3` مشتری و اینستاگرام | 7 محتوای اینستاگرام · 8 پاسخ خودکار · 10 باشگاه مشتری |
+| `job 3` اینستاگرام و شبکه‌های اجتماعی | 7 محتوای اینستاگرام · 8 پاسخ خودکار |
+| `job 5` تحلیل مشتری‌ها | 10 باشگاه مشتری · 14 مشتری‌ها کی‌اند و کِی می‌آیند |
 | `job 4` مقایسه | 9 مقایسهٔ بی‌نام |
 | `delivery 0` برگهٔ کاغذی | 0 برگهٔ ماهانه |
 | `delivery 3` دستیار فارسی | 13 دستیاری که فارسی جواب می‌دهد |
 
-All fourteen now have a home. Two of them (0 and 13) sit under `delivery` rather than
+All fifteen now have a home. Two of them (0 and 13) sit under `delivery` rather than
 `job`, because they were never jobs — they are ways the answer arrives.
 
-**3.6.1 `job` — کار اصلی (5)**
+**3.6.1 `job` — کار اصلی (6)**
 `0` قیمت و سود آیتم‌ها · `1` سفارش و انبار · `2` شیفت و نیرو ·
-`3` مشتری و اینستاگرام · `4` مقایسه با کافه‌های دیگر رشت
+`3` اینستاگرام و شبکه‌های اجتماعی · `4` مقایسه با کافه‌های دیگر رشت ·
+`5` تحلیل مشتری‌ها
+
+Level `3` was «مشتری و اینستاگرام» and level `5` did not exist until 14 September 2026.
+Two changes, made together because they only work together:
+
+1. Level `3` now names the **channel** rather than the audience, so it houses items 7
+   and 8 — and item 8 (جواب دایرکت و رزرو) is a social-media task, not a marketing one.
+   A broader «مشاورهٔ بازاریابی» was considered and rejected: item 8 would have had no
+   home under it, dropping MaxDiff coverage from 15/15 to 14/15.
+2. Level `5` takes the **people** — item 10, plus the new item 14. Splitting channel from
+   audience keeps the two distinguishable in one line of Persian, which a
+   marketing/customer-analysis pair would not have been.
+
+**[STATS] Level labels are grammatically parallel on purpose.** Every level names a
+*domain*, never an outcome. A level worded as a benefit («کارایی شبکه‌های اجتماعی»)
+attracts choice over one worded as a subject, and that lift is indistinguishable from
+preference in the fitted part-worths.
+
+**[STATS] `c` is now 6, so the sample floor moved.** See §4: the design runs **12**
+tasks rather than 10 to hold the floor near where it was.
 
 **3.6.2 `input` — داده چطور وارد می‌شود (4)**
 `0` خودکار از صندوق فروش · `1` عکس گرفتن از فاکتور ·
@@ -417,39 +442,59 @@ be wrong in a way no diagnostic catches. Therefore:
 
 ### Sample size
 
-Johnson–Orme's rule for main effects, `n ≥ 500·c / (t·a)` with `c = 5` levels,
-`t = 10` tasks, `a = 3` alternatives, gives **83 respondents**. Ten tasks rather than
-eight is exactly what brings this within reach of the 80-café target; at eight tasks it
-would be 104.
+Johnson–Orme's rule for main effects, `n ≥ 500·c / (t·a)` with `c = 6` levels,
+`t = 12` tasks, `a = 3` alternatives, gives **84 respondents** (83.3, rounded up — a
+floor rounds up).
 
-**That floor is about precision, not validity.** Measured on this design, sd 0.25, ten
-replicates per row:
+**Why twelve tasks.** `c` is the largest level count on any attribute, and `job` gained a
+sixth level on 14 September 2026 (§3.6.1). At the previous ten tasks that would have put
+the floor at **100**. Twelve tasks bring it back to 84 for about forty extra seconds per
+interview — twenty-odd fewer cafés for well under a minute of each owner's time.
 
-| cafés | observations | utility correlation | WTP error | picks the right best level |
+**That floor is about precision, not validity.** Measured with `analysis/precision_sweep.py`
+on the shipped design, heterogeneity sd 0.25, ten replicates per row.
+
+**[STATS] The WTP error column is in COFFEES.** An earlier version of this table carried
+numbers measured under the old barista-shift ladder (×0.5–×5, a span of 4.5 units) while
+the denominator had already moved to coffees (×3–×25, a span of 22). The figures were
+right and the unit was wrong, which understated the error by roughly 3.5×. Re-measure with
+`precision_sweep.py` rather than copying numbers forward.
+
+Measured on design `2026-09-14-42a7db` — 12 tasks × 3 alternatives, 19 parameters:
+
+| cafés | utility correlation | WTP error | mean SE | picks the right best level |
 |---|---|---|---|---|
-| 25 | 250 | 0.954 | ±0.78 shifts | 93 % |
-| 40 | 400 | 0.971 | ±0.43 shifts | 97 % |
-| 60 | 600 | 0.983 | ±0.33 shifts | 97 % |
-| **83** | 830 | 0.987 | ±0.31 shifts | 95 % |
-| 120 | 1200 | 0.990 | ±0.29 shifts | 95 % |
-| 200 | 2000 | 0.995 | ±0.20 shifts | 98 % |
+| 20 | 0.952 | ±1.91 coffees | 0.167 | 87 % |
+| 25 | 0.949 | ±1.46 coffees | 0.147 | 93 % |
+| 40 | 0.971 | ±1.23 coffees | 0.113 | 97 % |
+| 60 | 0.983 | ±0.91 coffees | 0.093 | 98 % |
+| **84** | 0.984 | ±1.05 coffees | 0.079 | 97 % |
+| 120 | 0.993 | ±0.65 coffees | 0.065 | 97 % |
+| 200 | 0.995 | ±0.67 coffees | 0.050 | 100 % |
 
-The *ranking* is remarkably stable all the way down — 40 cafés already recovers the best
-level of each attribute 97 % of the time. What degrades is WTP as a quantity. Below about
-40 cafés the ±0.78 error exceeds the entire spread of `delivery` or `who`, so WTP stops
-carrying information while the ranking is still sound.
+Precision is essentially unchanged from the five-level/ten-task design despite
+estimating a nineteenth parameter — the two extra tasks pay for the extra level.
+
+Read `mean SE`, not `WTP error`: it falls smoothly as 1/√n, where the other two columns
+wobble between adjacent rows because ten replicates do not smooth them. **To halve the
+error, quadruple the cafés.**
+
+The *ranking* is stable well below the floor — 40 cafés already recovers the best level of
+each attribute 93 % of the time. What degrades is WTP as a quantity. Below about 40 cafés
+the error runs past ±1.6 coffees, which exceeds the entire spread of `commit` or `who`, so
+WTP stops carrying information while the ranking is still sound.
 
 **Read it as three bands:**
 
 - **Under 40 cafés** — MaxDiff counting scores are the headline. Quote conjoint *direction*
   only: which level of each attribute wins. Never quote a price.
 - **40 to 80** — conjoint ranking and attribute importance are trustworthy. WTP is
-  directional, ±0.4 shifts; quote it as a band and never to a decimal place.
-- **80 and up** — WTP is quotable as a range. It tightens slowly after that: you would need
-  roughly 200 cafés to halve the error, which is almost certainly not worth the fieldwork.
+  directional at roughly ±1.1–1.3 coffees; quote it as a band, never to a decimal place.
+- **80 and up** — WTP is quotable as a range of about ±1 coffee. It tightens slowly after
+  that: roughly 320 cafés to halve it again, which is not worth the fieldwork.
 
 This means a genuine readout is possible at **40 cafés**, roughly half the target, rather
-than waiting for 83 before anything can be said. Plan the analysis in two passes.
+than waiting for 84 before anything can be said. Plan the analysis in two passes.
 
 ## 5. Data model
 
@@ -521,7 +566,7 @@ Compute on device, store in `quality`, never show to the player.
 - `latency_ms` on every MaxDiff and CBC screen. Flag `fast_tasks` where `< 2000 ms`.
 - `trap_failed` — true if the dominated alternative was chosen in *either* trap task,
   determined by profile comparison, not index (§2.4).
-- `straightlined` — true if the same card *position* was chosen in ≥ 8 of 10 CBC tasks.
+- `straightlined` — true if the same card *position* was chosen in ≥ 9 of 12 CBC tasks.
 - `holdout_consistent` — left null on device; the analysis repo fills it from model fit.
 - `completed` — reached module 6.
 
@@ -550,7 +595,7 @@ section's own instruction.
 |---|---|
 | consent withheld | not ours to analyse |
 | incomplete | never reached module 6 |
-| straight-lined | same position in ≥ 8 of 10 tasks |
+| straight-lined | same position in ≥ 9 of 12 tasks |
 | `fast_tasks ≥ 5` | nobody reads three six-attribute packages in under two seconds |
 | `trap_failed` **and** `fast_tasks ≥ 2` | the trap, corroborated by speed |
 
@@ -675,8 +720,8 @@ Separate Python project in `/analysis`, reading the exported session files.
 
   **Levels can price out past the ladder.** Where a level is worth more than the ladder
   can express, `wtp.csv` marks `extrapolated = true`. Those numbers extrapolate along
-  a *flattening* curve and are wildly overstated — read them as "worth more than five
-  shifts", never as the printed figure. If more than a quarter of levels extrapolate, the
+  a *flattening* curve and are wildly overstated — read them as "worth more than
+  twenty-five coffees", never as the printed figure. If more than a quarter of levels extrapolate, the
   ladder is too narrow for this population and must be re-set before the next batch;
   `analyse.py` says so in `quality_report.txt`.
 

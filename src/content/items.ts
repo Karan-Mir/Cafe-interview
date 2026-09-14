@@ -15,6 +15,7 @@ export const MAXDIFF_ITEMS: { title: string; line: string; visual: ServiceVisual
   { title: "ساعت‌هایی را که به‌صرفه نیستند پیدا کن", line: "نشانت می‌دهد در چه ساعت‌هایی هزینهٔ باز بودن کافه از فروش آن ساعت بیشتر است.", visual: "clock" },
   { title: "کارهای روزانهٔ کارکنان را مرتب کن", line: "کارهای باز و بسته کردن کافه، نظافت و کنترل دما را می‌چیند تا چیزی از قلم نیفتد.", visual: "checklist" },
   { title: "هرچه می‌پرسم، فارسی جواب بده", line: "مثلاً می‌پرسی «ماه پیش چای بیشتر فروختیم یا قهوه؟» و همان لحظه جواب می‌گیری.", visual: "assistant" },
+  { title: "بگو مشتری‌هایم کی‌اند و کِی می‌آیند", line: "نشانت می‌دهد بیشتر مشتری‌هایت چه گروهی هستند و در چه ساعت‌هایی می‌آیند تا برنامهٔ کافه را با آن‌ها بچینی.", visual: "loyalty" },
 ];
 
 /** SPEC 3.6 -- level indices are FIXED and must match cbc_design.json. */
@@ -25,8 +26,9 @@ export const ATTRIBUTES: { id: string; label: string; icon: string; levels: stri
       "قیمت و سود آیتم‌ها",
       "سفارش و انبار",
       "شیفت و نیرو",
-      "مشتری و اینستاگرام",
+      "اینستاگرام و شبکه‌های اجتماعی",
       "مقایسه با کافه‌های دیگر رشت",
+      "تحلیل مشتری‌ها",
     ],
   },
   {
@@ -69,7 +71,7 @@ export const ATTRIBUTES: { id: string; label: string; icon: string; levels: stri
 /** SPEC 3.6.6 -- multiples of this café's own reference item. */
 export const PRICE_MULT = [3, 6, 10, 16, 25];
 
-/** The five job areas the coins are spread across (SPEC 2.3) = job levels. */
+/** The six job areas the coins are spread across (SPEC 2.3) = job levels. */
 export const COIN_JOBS = ATTRIBUTES[0].levels;
 
 export const COPY = {
@@ -89,7 +91,7 @@ export const COPY = {
   maxdiffWorst: "کمتر لازم دارم",
   maxdiffHelp: "فرض کن هر چهار کار را برای کافه‌ات انجام می‌دهم. یکی را برای «بیشترین فایده» و یکی را برای «کمترین فایده» انتخاب کن؛ جواب درست یا غلط نداریم.",
   coinsTitle: "سکه‌ها",
-  coinsPrompt: "۱۰ سکه را بین این پنج کار تقسیم کن. سکهٔ بیشتر یعنی آن کار برایت مهم‌تر است. می‌توانی به یک کار هیچ سکه‌ای ندهی یا همه را به همان کار بدهی؛ در پایان باید هر ۱۰ سکه تقسیم شده باشد.",
+  coinsPrompt: "۱۲ سکه را بین این شش کار تقسیم کن. سکهٔ بیشتر یعنی آن کار برایت مهم‌تر است. می‌توانی به یک کار هیچ سکه‌ای ندهی یا همه را به همان کار بدهی؛ در پایان باید هر ۱۲ سکه تقسیم شده باشد.",
   coinsLeft: "سکهٔ باقی‌مانده",
   cbcTitle: "کدوم بسته رو برمی‌داری",
   cbcPrompt: "کدام بسته برای کافه‌ات مناسب‌تر است؟",

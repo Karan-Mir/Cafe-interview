@@ -6,7 +6,7 @@ import { COIN_JOBS, COPY } from "../content/items";
 import { fa } from "../core/fa";
 import { SectionIntro } from "../ui/Illustration";
 
-const TOTAL = 10;
+const TOTAL = 12;   // six job areas (SPEC 2.3); 12 divides evenly, 10 does not
 
 /** SPEC 2.3 -- ten coins across the five jobs. Measures intensity, which a
  *  ranking cannot. Must allocate exactly ten; never show a timer. */

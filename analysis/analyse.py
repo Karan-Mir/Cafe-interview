@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 # must mirror SPEC.md §3.6 and design/cbc_design.json
-ATTRS = [("job", 5), ("input", 4), ("delivery", 4), ("who", 3), ("commit", 3), ("price", 5)]
+ATTRS = [("job", 6), ("input", 4), ("delivery", 4), ("who", 3), ("commit", 3), ("price", 5)]
 PRICE_MULT = [3.0, 6.0, 10.0, 16.0, 25.0]       # multiples of the reference item
 PRICE_UNIT = "coffees"                          # ... per month. See SPEC 3.6.6.
 
@@ -30,7 +30,7 @@ PRICE_UNIT = "coffees"                          # ... per month. See SPEC 3.6.6.
 # whenever two levels are close, and every WTP in the attribute moves with it.
 # Reference = the LEAST ATTRACTIVE version we would actually ship, declared a
 # priori on business grounds, never fitted to the data:
-#   job 4      benchmark comparison only, the thinnest offering
+#   job 4      benchmark comparison only, still the thinnest of the six
 #   input 2    five minutes of manual entry a day, the most owner effort
 #   delivery 0 a monthly paper sheet, the lowest tech and least timely
 #   who 0      it decides and tells you -- least control, most trust demanded
@@ -44,7 +44,7 @@ REFERENCE = {"job": 4, "input": 2, "delivery": 0, "who": 0, "commit": 2}
 # and those need headroom toward the expensive end of the ladder, which anchoring
 # low maximises. The rare negative delta is extrapolated and flagged, not dropped.
 PRICE_ANCHOR = 3.0
-N_ITEMS = 14
+N_ITEMS = 15
 LEVELS = [n for _, n in ATTRS]
 K = sum(n - 1 for n in LEVELS)
 
@@ -346,18 +346,25 @@ def take_rate(sessions: list[dict]) -> tuple[pd.DataFrame, float]:
 
 
 def coins_summary(sessions: list[dict]) -> pd.DataFrame:
-    """Module 3 allocates 10 coins across the five jobs and nothing read it."""
+    """Module 3 allocates coins across the job areas (SPEC 2.3).
+
+    The job count and the coin total are DERIVED, never hardcoded. Both moved on
+    14 Sep 2026 (five jobs/ten coins -> six/twelve) and a literal range(5) would
+    have dropped the new job silently: no error, just one row missing forever.
+    """
+    n_jobs = dict(ATTRS)["job"]
     rows = []
     for s in sessions:
         c = s.get("coins") or {}
         if c:
-            rows.append({f"job_{k}": c.get(f"job_{k}", 0) for k in range(5)})
+            rows.append({f"job_{k}": c.get(f"job_{k}", 0) for k in range(n_jobs)})
     if not rows:
         return pd.DataFrame()
     df = pd.DataFrame(rows)
-    return pd.DataFrame({"job": range(5),
+    total = float(df.sum(axis=1).mean()) or 1.0        # coins actually allocated
+    return pd.DataFrame({"job": range(n_jobs),
                          "mean_coins": df.mean().to_numpy(),
-                         "share_pct": df.mean().to_numpy() / 10 * 100,
+                         "share_pct": df.mean().to_numpy() / total * 100,
                          "pct_giving_zero": (df == 0).mean().to_numpy() * 100,
                          "pct_giving_4plus": (df >= 4).mean().to_numpy() * 100})
 

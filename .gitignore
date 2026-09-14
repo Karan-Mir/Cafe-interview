@@ -11,3 +11,6 @@ __pycache__
 *.tsbuildinfo
 .env.local
 .env
+
+# local scratch: stitched HTML previews of the design canvas / report
+.preview/

@@ -331,7 +331,7 @@ input[type="checkbox"] { accent-color:var(--moss); flex-shrink:0; }
   .jobrow .dots { min-width:0; max-width:4rem; }
   .jobrow .name { min-width:100px; font-size:.95rem; }
   .jobrow .btn { padding:0 .8rem; }
-  .tray { padding:1rem; }
+  .tray { padding:1rem; gap:5px; }
   .tray .dot { width:20px; height:20px; }
   .cafecard { padding:1.2rem; padding-inline-start:5rem; }
   .grid2 { grid-template-columns:1fr 1fr; }

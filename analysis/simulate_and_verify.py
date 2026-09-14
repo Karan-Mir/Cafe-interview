@@ -24,7 +24,8 @@ cbc_design = json.loads((HERE.parent / "design/cbc_design.json").read_text(encod
 # ── the answer key ───────────────────────────────────────────────────────
 # CBC: effects-coded true utilities, one block per attribute.
 TRUE = {
-    "job":      [0.9, 0.2, -0.4, -0.3, -0.4],   # pricing/margin wins
+    "job":      [0.9, 0.2, -0.4, -0.3, -0.4, 0.1],  # pricing/margin wins;
+                                                # [5] customer analysis, mild
     "input":    [0.8, 0.5, -0.9, -0.4],         # automatic in, manual daily hated
     "delivery": [-0.5, 0.2, 0.3, 0.0],          # paper worst; app best; assistant middling
     "who":      [-0.3, 0.6, -0.3],              # automatic but supervised
@@ -38,7 +39,7 @@ for k in TRUE:                                   # effects coding: levels sum to
 TRUE_BUY_INTERCEPT = -0.6          # planted base rate for the dual-response none
 
 TRUE_MD = np.array([0.3, 1.4, 1.1, -0.2, 0.4, -0.5, 0.9, -0.3,
-                    -0.6, 0.8, -0.9, 0.5, -1.1, 0.2])          # 14 items
+                    -0.6, 0.8, -0.9, 0.5, -1.1, 0.2, 0.6])     # 15 items
 TRUE_MD = TRUE_MD - TRUE_MD.mean()
 
 
@@ -150,8 +151,9 @@ for i in range(N):
                     "price_ref_item": "espresso", "price_ref_toman": 95000},
         "price_mult": [3.0, 6.0, 10.0, 16.0, 25.0],
         "maxdiff": {"version": mdv, "responses": md_resp},
+        # 12 coins over SIX job areas (SPEC 2.3) -- must track ATTRS["job"]
         "coins": {f"job_{k}": int(v) for k, v in
-                  enumerate(RNG.multinomial(10, [.4, .2, .1, .2, .1]))},
+                  enumerate(RNG.multinomial(12, [.35, .18, .09, .17, .09, .12]))},
         "cbc": {"version": cbv, "responses": cbc_resp},
         "open": {"audio_ref": None, "duration_s": 0, "text": None},
         "close": {"referrals": [], "allow_pos_data": "نه", "pilot_willing": True},
